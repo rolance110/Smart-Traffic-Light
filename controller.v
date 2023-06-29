@@ -1,14 +1,75 @@
-module controler (RYG, LRYG, L, H, clk, reset, count_in, count_reset);
+module controller (
+	input clk, 
+	input reset,
+	input [2:0] L,
+	input [2:0] H,
 
-input clk, reset ;
-input [2:0] L, H ;
-input [4:0] count_in ;
+	output reg [2:0] RYG, 
+	output reg [3:0] LRYG,
+	output reg  P,
+	
+	input count_in, 
+	output count_reset,
+	);
 
-output count_reset ;
-output reg [2:0] RYG ;
-output reg [3:0] LRYG ;
+//finit state machine
+reg [2:0] ns,cs;// ns:nextstate  cs:currentstate
+parameter INIT =3'd0;//initial
+parameter M=3'd1;
+parameter M_L=3'd2;
+parameter S=3'd3;
+parameter PEDESTRIAN=3'd4;
+parameter M_Y=3'd5;
+parameter S_Y=3'd6;
+//set currentstate
+always@(posedge clk or posedge reset)
+begin
+	if(reset)
+		cs <= INIT ;
+	else
+		cs <= ns ;
+end
 
-reg [2:0] cs, cs0, ns ;
+//set nextstate from currentstate
+always@(*)
+begin
+	case(cs)
+		INIT:
+			ns=M;             
+		M:
+			if()
+				ns=M_Y;
+			else
+				ns=M;
+		M_Y:
+			if()
+				ns=M_L;
+			else if()
+				ns=S;//有可能沒亮左轉燈
+			else
+				ns=M_Y;
+		M_L:
+			if()
+				ns=M_Y;
+			else
+				ns=M_L;
+		S:
+			if()
+				ns=S_Y;
+			else
+				ns=S;
+		S_Y:
+			if()
+				ns=PEDESTRIAN;
+			else if()
+				ns=M;
+			else
+				ns=S_Y;
+		default:
+			ns=INIT ;
+
+	endcase
+end
 reg [4:0] MaxTime ;
 
 wire in_reset,ToEnd ;
@@ -20,7 +81,7 @@ assign in_reset = reset || (RYG[1] && LRYG[2]&& ToEnd);//
 assign count_reset = in_reset || ToEnd ;
 
 ///////////output light(from current state)///////////////////
-always @ (cs)
+always @ (posedge clk or posedge rst)
 	case(cs)
 		3'd0 : begin 
 			LRYG <= 4'b0001 ;//Master road:G
