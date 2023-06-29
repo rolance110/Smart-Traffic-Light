@@ -18,4 +18,5 @@ always @ (posedge clk)
 //using D flip flop
 Dff D0(D, Q, en, reset, clk);
 //test
+
 endmodule
