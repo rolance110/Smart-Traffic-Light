@@ -16,10 +16,6 @@ reg [4:0] MaxTime ;
 reg [4:0] sec_count ;
 
 
-
-
-
-
 //finit state machine
 reg [2:0] ns,cs;// ns:nextstate  cs:currentstate
 parameter INIT =3'd0;//initial
@@ -147,7 +143,6 @@ always @ (*)begin
 		default : MaxTime = 5'd0 ;
 	endcase
 end
-
 
 
 
