@@ -131,7 +131,7 @@ always@(posedge rst or posedge clk) begin
 		sec_count <= sec_count + 5'd1 ;
 	end
 end
-//dicide reletive time
+//dicide sub_Maxtime by reletive number
 always @ (*)begin
 	case(cs) 
 		M_G :begin
@@ -175,7 +175,68 @@ always @ (*)begin
 		default : MaxTime = 5'd0 ;
 	endcase
 end
-
+//dicide rate_Maxtime by absolutive number
+always @ (*)begin
+	case(absolutenum) 
+		3'b100:begin
+			if(cs==M_G || cs==P_G)
+				r_MaxTime = 2'd2;
+			else
+				r_MaxTime = 2'd1;
+		end
+		3'b010:begin
+			if(cs==S_G || cs==P_G)
+				r_MaxTime = 2'd2;
+			else
+				r_MaxTime = 2'd1;
+		end
+		3'b001:begin
+			if(cs==L_G)
+				r_MaxTime = 2'd0;
+			else if(cs==P_G)
+				r_MaxTime = 2'd2;
+			else
+				r_MaxTime = 2'd1;
+		end
+		3'b110:begin
+			if(cs==M_G || cs==S_G || cs==P_G)
+				r_MaxTime = 2'd2;
+			else
+				r_MaxTime = 2'd1;
+		end
+		3'b101:begin
+			if(cs==L_G)
+				r_MaxTime = 2'd0;
+			else if(cs==M_G || cs==P_G)
+				r_MaxTime = 2'd2;
+			else
+				r_MaxTime = 2'd1;
+		end
+		3'b011:begin
+			if(cs==L_G)
+				r_MaxTime = 2'd0;
+			else if(cs==S_G || cs==P_G)
+				r_MaxTime = 2'd2;
+			else
+				r_MaxTime = 2'd1;
+		end
+		3'b111:begin
+			if(cs==L_G)
+				r_MaxTime = 2'd0;
+			else if(cs==M_G || cs==S_G || cs==P_G)
+				r_MaxTime = 2'd2;
+			else
+				r_MaxTime = 2'd1;
+		end
+		3'd000:begin//formal case
+			if(cs==P_G)
+				r_MaxTime = 2'd2;
+			else
+				r_MaxTime = 2'd1;
+		end
+		default : r_MaxTime = 2'd0 ;
+	endcase
+end
 
 
 endmodule
