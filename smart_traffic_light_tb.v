@@ -1,29 +1,43 @@
-`timescale	10ns/100ps
+`timescale	1ns/10ps
 module smart_traffic_light_tb;
 
-reg clk, reset ;
-reg [2:0] L, H ;
-
-wire [2:0] RYG ;
-wire [3:0] LRYG ;
-wire [4:0] count_out;
+reg clk, rst ;
+reg [2:0] main_num, left_num, sec_num, p_num;
+reg s_emergency;
+wire [2:0] s_RYG;
+wire [3:0] m_LRYG;
+wire p;
 
 initial begin
-	$fsdbDumpfile("STL.fsdb");
-	$fsdbDumpvars;
+	$monitor($time, " main_num=%d, left_num=%d, sec_num=%d, p_num=%d, s_emergency=%b, m_LRYG=%b, s_RYG=%b, p=%b", main_num, left_num, sec_num, p_num, s_emergency, m_LRYG, s_RYG, p);
 end
 
-
-smart_traffic_light T0 (RYG, LRYG, L, H, clk, reset,count_out) ;
-
-
-
+initial begin
+	`ifdef FSDB
+		$fsdbDumpfile("Smart_Traffic_Light.fsdb");
+		$fsdbDumpvars;
+	`endif
+end
+smart_traffic_light STL (
+	.clk(clk),
+	.rst(rst),
+	.main_num(main_num),
+	.left_num(left_num),
+	.sec_num(sec_num),
+	.p_num(p_num),
+	.s_emergency(s_emergency),
+	.m_LRYG(m_LRYG),
+	.s_RYG(s_RYG),
+	.p(p)
+);
 
 initial begin
 	clk <= 1'b0 ;
-	reset <= 1'b0 ;
-	L <= 3'b000 ;
-	H <= 3'b000 ;
+	rst <= 1'b0 ;
+	main_num <= 3'b0 ;
+	left_num <= 3'b0 ;
+	sec_num <= 3'b0 ;
+	p_num <= 3'b0 ;
 
 end
 
@@ -33,66 +47,42 @@ end
 
 initial begin
 	#10
-		reset = 1'b1 ;
+		rst = 1'b1 ;
 	#11
-		reset = 1'b0 ;
-	#10
-		L = 3'b000 ;                         // L : 0 car waiting
-		H = 3'b100 ;                         // H : 1 car waiting to turn left
-	#5200
-		L = 3'b100 ;                         // L : 1 car waiting
-		H = 3'b000 ;                         // H : 0 car waiting to turn left
-	#3700
-		L = 3'b000 ;                         // L : 0 car waiting
-		H = 3'b000 ;                         // H : 0 car waiting to turn left
-	#300
-		L = 3'b100 ;                         // L : 1 car waiting
-		H = 3'b100 ;                         // H : 1 car waiting to turn left
-	#5000
-		L = 3'b100 ;                         // L : 1 car waiting
-		H = 3'b100 ;                         // H : 1 car waiting to turn left
-	#500
-		L = 3'b100 ;                         // L : 1 car waiting
-		H = 3'b110 ;                         // H : 2 cars waiting to turn left
-	#2600
-		L = 3'b000 ;                         // L : 0 car waiting
-		H = 3'b000 ;                         // H : 0 car waiting to turn left
-	#800
-		L = 3'b110 ;                         // L : 2 cars waiting
-		H = 3'b100 ;                         // H : 1 car waiting to turn left
-
-	#3100
-		L = 3'b111 ;                         // L : 3 cars waiting
-		H = 3'b000 ;                         // H : 0 car waiting to turn left
-
-	#2900
-		L = 3'b000 ;                         // L : 0 car waiting
-		H = 3'b110 ;                         // H : 2 cars waiting to turn left*/
-	#3500
+		rst = 1'b0 ;
+	#100
+		main_num = 3'b000 ;
+		left_num = 3'b000 ;
+		sec_num = 3'b000 ;
+		p_num = 3'b000 ;
+		s_emergency = 1'b0 ;
+	#100
+		main_num = 3'b001 ;
+		left_num = 3'b000 ;
+		sec_num = 3'b000 ;
+		p_num = 3'b000 ;
+		s_emergency = 1'b0 ;
+	#100
+		main_num = 3'b010 ;
+		left_num = 3'b010 ;
+		sec_num = 3'b100 ;
+		p_num = 3'b010 ;
+		s_emergency = 1'b0 ;
+	#100
+		main_num = 3'b011 ;
+		left_num = 3'b010 ;
+		sec_num = 3'b100 ;
+		p_num = 3'b010 ;
+		s_emergency = 1'b0 ;
+	#100
+		main_num = 3'b100 ;
+		left_num = 3'b100 ;
+		sec_num = 3'b010 ;
+		p_num = 3'b100 ;
+		s_emergency = 1'b0 ;	
+	#1000
 		$finish ;
 end
 
-/*
-always@(posedge clk)begin
-	$display("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-	$display("      lPPPPP");
-	$display("      ll");
-	$display("      ll");
-	$display("   oooooooo");
-	$display("  oooooooooo");
-	$display(" oooooooooooo");
-	$display(" oooooooooooo              ,-.__.-,                           ");
-	$display("  oooooooooo              (``-''-//).___..--'''`-._           ");
-	$display("   oooooooo                `6_ 6  )   `-.  (     ).`-.__.`)   ");
-	$display("                           (_Y_.)'  ._   )  `._ `. ``-..-'    ");
-	$display("                         _..`--'_..-_/  /--'_.' ,'            ");
-	$display("                        (il),-''  (li),'  ((!.-'              ");
-	$display("");
-	$display("Congratulations !");
-	$display("Simulation Complete!!");
-	$display("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-	$display("");
-	$finish;
-end*/
 endmodule
 
