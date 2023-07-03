@@ -2,9 +2,14 @@ module controller (
 	input clk, 
 	input rst,
 	input s_emergency,
+	input [2:0] absolute_num,
+	input m_more,
+	input l_zero,
+	input s_more,
+	input p_more,
 	output reg [2:0] s_RYG, 
 	output reg [3:0] m_LRYG,
-	output reg  ped,
+	output reg  p,
 	);
 
 reg [2:0] num;
