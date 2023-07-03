@@ -1,11 +1,6 @@
 module controller (
 	input clk, 
 	input rst,
-	input [2:0] main_num,
-	input [2:0] left_num,
-	input [2:0] sec_num,
-	input [2:0] p_num,
-	input m_emergency,
 	input s_emergency,
 	output reg [2:0] s_RYG, 
 	output reg [3:0] m_LRYG,
@@ -44,19 +39,23 @@ begin
 		INIT:
 			ns=M_G;             
 		M_G:
-			if(sec_count == MaxTime)
+			if(s_emergency == 1'b1)
+				ns=M_Y;
+			else if(sec_count == MaxTime)
 				ns=M_Y;
 			else
 				ns=M;
 		M_Y:
-			if( sec_count == MaxTime)
+			if(sec_count == MaxTime && (left_num == 3'd0 || s_emergency == 1'd1))
+				ns=S_G;
+			else if(sec_count == MaxTime)
 				ns=M_L;
-			else if( left_num == 3'd0)
-				ns=S_G;//有可能沒亮左轉燈
 			else
 				ns=M_Y;
 		M_L:
-			if(sec_count == MaxTime)
+			if(s_emergency == 1'b1)
+				ns=M_Y;
+			else if(sec_count == MaxTime)
 				ns=M_Y;
 			else
 				ns=M_L;
@@ -76,7 +75,7 @@ begin
 			if(sec_count == MaxTime)
 				ns=P_Y;
 			else
-				ns=P;
+				ns=P_G;
 		default:
 			ns=INIT ;
 
@@ -127,7 +126,7 @@ always@(posedge rst or posedge clk) begin
 	if (rst)begin
 		sec_count <= 5'd0 ;
 	end
-	else if (sec_count == MaxTime)begin
+	else if (sec_count == MaxTime || s_emergency==1'b0)begin
 		sec_count <= 5'd0 ;
 	end
 	else begin
@@ -180,7 +179,7 @@ always @ (*)begin
 end
 //dicide rate_Maxtime by absolutive number
 always @ (*)begin
-	case(absolutenum) 
+	case(absolute_num) 
 		3'b100:begin
 			if(cs==M_G || cs==P_G)
 				r_MaxTime = 2'd2;
