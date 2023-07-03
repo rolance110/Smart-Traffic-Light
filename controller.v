@@ -131,15 +131,47 @@ always@(posedge rst or posedge clk) begin
 		sec_count <= sec_count + 5'd1 ;
 	end
 end
-//max time
+//dicide reletive time
 always @ (*)begin
 	case(cs) 
-		M_G : MaxTime = 5'd30 ;
-		M_Y : MaxTime = 5'd3 ;
-		M_L : MaxTime = 5'd12 ;
-		S_G : MaxTime = 5'd18 ;
-		S_Y : MaxTime = 5'd3 ;
-		P_G : MaxTime = 5'd18 ;
+		M_G :begin
+			if(m_more == 1'b1)
+				sub_MaxTime = 5'd25 ;
+			else if(l_zero)
+				sub_MaxTime = 5'd28 ;
+			else if(s_more == 1'b1)
+				sub_MaxTime = 5'd15 ;
+			else if(p_more == 1'b1)
+				sub_MaxTime = 5'd15 ;
+			else//general case
+				sub_MaxTime = 5'd20 ;
+		end
+		M_Y : sub_MaxTime = 5'd3 ;
+		M_L :begin 
+			if(l_zero == 1'b1)
+				sub_MaxTime = 5'd0 ;
+			else//general case
+				sub_MaxTime = 5'd6 ;
+		end
+		S_G :begin
+			if(m_more == 1'b1)
+				sub_MaxTime = 5'd5 ;
+			else if(l_zero)
+				sub_MaxTime = 5'd8 ;
+			else if(s_more == 1'b1)
+				sub_MaxTime = 5'd15 ;
+			else if(p_more == 1'b1)
+				sub_MaxTime = 5'd5 ;
+			else//general case
+				sub_MaxTime = 5'd10 ;
+		end
+		S_Y : sub_MaxTime = 5'd3 ;
+		P_G :begin
+			if(p_more == 1'b1)
+				sub_MaxTime = 5'd20 ;
+			else//general case
+				sub_MaxTime = 5'd10 ;
+		end 
 		default : MaxTime = 5'd0 ;
 	endcase
 end
