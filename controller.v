@@ -12,7 +12,10 @@ module controller (
 	output reg  ped,
 	);
 
-reg [4:0] MaxTime ;
+reg [2:0] num;
+reg [4:0] sub_MaxTime;
+reg [1:0] r_MaxTime;
+reg [4:0] MaxTime;
 reg [4:0] sec_count ;
 
 
@@ -237,6 +240,16 @@ always @ (*)begin
 		default : r_MaxTime = 2'd0 ;
 	endcase
 end
-
-
+always@(*) begin
+	case(cs)
+		M_G : num = main_num ;
+		M_L : num = left_num ;
+		S_G : num = sec_num ;
+		P_G : num = p_num ;
+		default : num = 3'd0 ;//yellow
+	endcase
+end
+always@(*)begin
+	MaxTime = sub_MaxTime + num<<r_MaxTime ;
+end
 endmodule
