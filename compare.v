@@ -17,5 +17,5 @@ assign p_more = (p_num>(main_num+sec_num))? 1'b1: 1'b0;
 assign absolute_num[2] = (main_num[2]==1)? 1'b1: 1'b0;
 assign absolute_num[1] = (sec_num==main_num)? 1'b1: 1'b0;
 assign absolute_num[0] = (left_num == 0)? 1'b1 : 1'b0;
-	
+//15FGG
 endmodule
