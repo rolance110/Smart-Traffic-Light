@@ -25,17 +25,17 @@
 ## module
 ![image](https://github.com/rolance110/Smart-Traffic-Light/assets/127593514/2162c28a-3900-4e1f-b1bf-be7cbea1908c)
 ## 控制訊號
-![image](https://github.com/rolance110/Smart-Traffic-Light/assets/127593514/46c82d0e-2359-4552-b400-cd728556b455) \
+![image](https://github.com/rolance110/Smart-Traffic-Light/assets/127593514/46c82d0e-2359-4552-b400-cd728556b455)
 ![image](https://github.com/rolance110/Smart-Traffic-Light/assets/127593514/c3349fd8-8ce3-482d-b5b1-a41d065cfc42)
 
 ## 模擬結果
-情況一：左轉道沒車、沒有人要過馬路 (左轉燈沒亮、行人號誌沒亮)\
+**情況一**：左轉道沒車、沒有人要過馬路 (左轉燈沒亮、行人號誌沒亮)\
 主幹道綠燈(29秒) → 主幹道黃燈(4秒) → 次幹道綠燈(9秒) → 次幹道黃燈(4秒)\
 ![image](https://github.com/rolance110/Smart-Traffic-Light/assets/127593514/7a147afd-f914-4d00-89b1-0a822ec13782)\
-情況二：次幹道車輛眾多(次幹道綠燈亮更久)\
+**情況二**：次幹道車輛眾多(次幹道綠燈亮更久)\
 主幹道綠燈(23秒) → 主幹道黃燈(4秒) → 左轉燈(9秒) → 主幹道黃燈(4秒) → 次幹道綠燈(15秒) → 次幹道黃燈(4秒) → 行人號誌(13秒)\
 ![image](https://github.com/rolance110/Smart-Traffic-Light/assets/127593514/e459eccd-3aaf-4044-8299-3acc96137c49)\
-情況三：偵測到的數量產生變(以新偵測到的數量為準)\
+**情況三**：偵測到的數量產生變(以新偵測到的數量為準)\
 主幹道綠燈(29秒) → 主幹道黃燈(4秒) → 左轉燈(8秒) (數量改變)→ 主幹道黃燈(4秒) → 次幹道綠燈(6秒) → 次幹道黃燈(4秒) → 行人號誌(24秒)\
 ![image](https://github.com/rolance110/Smart-Traffic-Light/assets/127593514/afede597-e0d6-47fb-8440-03a79d73be33)\
 ## 結論與未來展望
